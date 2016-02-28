@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+
+        <title>Editeur de diagrammes d'actions - Pseudo Code Parser</title>
+
+        <link rel="stylesheet" href="styles/editor.css" media="screen" charset="utf-8"/>
+        <link rel="stylesheet" href="styles/print.css" media="print" charset="utf-8"/>
+    </head>
+    <body>
+        <div class="welcome" id="overlay">
+            <div class="text">
+                <h1>Pseudo Code Parser</h1>
+                <h2>Editeur de diagrammes d'actions en ligne</h2>
+                <a id="openEditor" href="#" class="button">Accéder à l'éditeur</a>
+                <p class="copyright">
+                    Development version - Alpha v0.1<br>
+                    A free-project of <a href="https://www.github.com/gaetanld">@gaetanld</a>.
+                </p>
+            </div>
+        </div>
+        <div class="editor">
+            <div class="input">
+                <textarea id="input" class="action-diagram" placeholder="">// - Créer une liste d'étudiants à partir de noms entrés
+// - Chaque étudiant ne peut apparaitre qu'une fois dans la liste
+// - Afficher le contenu de la liste
+
+---* Exemple de diagramme d'actions
+nbEtudiants = 0
+
+Obtenir nomEtud
+do while (nomEtud != "ZZZ")
+   module(Màj. TabEtudiants;tabEtudiants, nbEtudiants, nomEtud;tabEtudiants, nbEtudiants)
+   Obtenir nomEtud
+enddo
+paragraphe(Sorties)
+------
+---* Màj. TabEtudiants
+iEtud = 0
+do while (iEtud < nbEtudiants AND tabEtudiants(iEtud) != nomEtud)
+   iEtud++
+enddo
+if (iEtud = nbEtudiants)
+   tabEtudiants(iEtud) = nomEtud
+   nbEtudiants++
+else
+   Sortir nomEtud, " est déjà inscrit dans la liste."
+endif
+------
+---* Sorties
+iEtud = 0
+do while (iEtud < nbEtudiants)
+   Sortir tabEtudiants(iEtud)
+   iEtud++
+enddo
+------</textarea>
+            </div>
+            <div class="output">
+                <pre id="output"></pre>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="scripts/PseudoCodeParser.js"></script>
+        <script type="text/javascript" src="scripts/editor.js"></script>
+    </body>
+</html>

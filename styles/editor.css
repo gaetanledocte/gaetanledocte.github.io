@@ -1,0 +1,133 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.fadeOut {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 150ms, opacity 150ms linear;
+}
+
+.welcome {
+    position: absolute;
+    top: 0; left: 0;
+    bottom: 0; right: 0;
+
+    background-color: rgba(0, 0, 0, 0.9);
+}
+    .welcome .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        text-align: center;
+
+        font-family: "Roboto", "Calibri", "Arial", sans-serif;
+        color: white;
+    }
+        .welcome .text h1 {
+            display: inline-block;
+            margin: 0;
+            padding-bottom: 4px;
+
+            border-bottom: 4px solid yellow;
+
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        .welcome .text h2 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8)
+        }
+        .welcome .text .button {
+            display: inline-block;
+            padding: 0.7rem 1.1rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+
+            background-color: yellow;
+            border: 2px solid yellow;
+            border-radius: 4px;
+
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111111;
+        }
+            .welcome .text .button:hover {
+                background-color: transparent;
+
+                color: yellow;
+            }
+        .welcome .text .copyright {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.25);
+        }
+            .welcome .text .copyright a {
+                border-bottom: 1px dotted rgba(255, 255, 255, 0.25);
+
+                text-decoration: none;
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .welcome .text .copyright a:hover {
+                border-bottom-width: 0;
+            }
+
+.editor {
+    width: 100vw;
+    height: 100vh;
+
+    overflow-x: hidden;
+}
+    .editor .input,
+    .editor .output {
+        width: 50vw;
+        max-width: 50vw;
+        height: 100vh;
+        float: left;
+
+        overflow-y: auto;
+    }
+    .editor .input {
+        background-color: #333;
+
+        color: white;
+    }
+    .editor .output {
+        background-color: #eeeeee;
+
+        color: #222;
+    }
+        .editor .input textarea,
+        .editor .output pre {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            max-height: 100vh;
+            margin: 0;
+            padding: 30px;
+
+            font-family: "Consolas", "Courier New", serif;
+            font-size: 14px;
+        }
+        .editor .input textarea {
+            background-color: transparent;
+            border: 0;
+
+            color: white;
+        }
+        .editor .output pre {
+            color: #333;
+        }

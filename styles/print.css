@@ -1,0 +1,17 @@
+.welcome {
+    display: none;
+}
+
+.editor {
+}
+    .editor .input {
+        display: none;
+    }
+    .editor .output pre {
+        margin: 0;
+        padding: 0;
+
+        font-family: "Consolas", "Courier New", serif;
+        font-size: 11pt;
+        line-height: 13pt;
+    }
