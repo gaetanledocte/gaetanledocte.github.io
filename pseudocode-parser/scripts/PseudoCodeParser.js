@@ -80,10 +80,10 @@ function PseudoCodeParser(args) {
      * @var {Array} Array of expressions (for extended formatting)
      */
     this.expressions = [
-        { pattern: /\[(.+)\]ent/i,              replacement: '<span style="color: #094ecd">[</span>$1<span style="color:#094ecd;">]<small>ENT</small></span>' },
-        { pattern: /\/\/ (.+)/i,                replacement: '<span style="color: #08a200">// $1</span>' },
-        { pattern: /^┌─── \* (.+)$/i,           replacement: '┌─── * <span style="color: #08a200">$1</span>' },
-        { pattern: /"(.+)"/i,                   replacement: '<span style="color: #c61717">"$1"</span>' }
+        { pattern: /\[(.+)\]ent/i,          replacement: '<span style="color: #094ecd">[</span>$1<span style="color:#094ecd;">]<small>ENT</small></span>' },
+        { pattern: /\/\/ (.+)/i,            replacement: '<span style="color: #08a200">// $1</span>' },
+        { pattern: /^┌─── \* (.+)$/i,       replacement: '┌─── * <span style="color: #08a200">$1</span>' },
+        { pattern: /"(.+)"/i,               replacement: '<span style="color: #c61717">"$1"</span>' }
     ];
 
     /**
@@ -263,8 +263,6 @@ PseudoCodeParser.prototype.addModules = function (string) {
         parts[2] = this.borders(true) + "o─" + border + "─o" + outputs;
 
         string = parts.join("\n");
-
-        console.log(string);
     }
     else if (string.match(/paragraph[e]?\((.+)\)/i)) {
         var args = string.replace(/paragraph[e]?\((.+)\)/i, function (whole, args) { return args; });
