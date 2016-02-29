@@ -1,65 +1,82 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="utf-8">
+        <title>Editeur de diagrammes d'actions</title>
 
-        <title>Editeur de diagrammes d'actions - Pseudo Code Parser</title>
-
-        <link rel="stylesheet" href="styles/editor.css" media="screen" charset="utf-8"/>
-        <link rel="stylesheet" href="styles/print.css" media="print" charset="utf-8"/>
+        <link rel="stylesheet" href="styles/editor.css" media="screen" charset="utf-8">
     </head>
     <body>
-        <div class="welcome" id="overlay">
-            <div class="text">
+        <!-- Welcome panel -->
+        <div class="overlay welcome" id="welcomePanel">
+            <div class="content">
                 <h1>Pseudo Code Parser</h1>
                 <h2>Editeur de diagrammes d'actions en ligne</h2>
-                <a id="openEditor" href="#" class="button">Accéder à l'éditeur</a>
+                <a class="button" id="buttonOpenDiagram" href="#" title="Ouvrir l'éditeur de diagrammes d'actions">Accéder à l'éditeur</a>
+                <p class="sub-button">
+                    Besoin d'un <a href="#">exemple d'utilisation</a> ?
+                </p>
                 <p class="copyright">
-                    Development version - Alpha v0.1<br>
-                    A free-project of <a href="https://www.github.com/gaetanld">@gaetanld</a>.
+                    Development version - Alpha v0.1.1<br>
+                    A free-project from <a href="https://www.github.com/gaetanld" target="_blank" title="Gaëtan Le Docte's Github Profile">@gaetanld</a>.
                 </p>
             </div>
         </div>
-        <div class="editor">
-            <div class="input">
-                <textarea id="input" class="action-diagram" placeholder="">// - Créer une liste d'étudiants à partir de noms entrés
-// - Chaque étudiant ne peut apparaitre qu'une fois dans la liste
-// - Afficher le contenu de la liste
+        <!-- End Welcome panel -->
 
----* Exemple de diagramme d'actions
-nbEtudiants = 0
-
-Obtenir nomEtud
-do while (nomEtud != "ZZZ")
-   module(Màj. TabEtudiants;tabEtudiants, nbEtudiants, nomEtud;tabEtudiants, nbEtudiants)
-   Obtenir nomEtud
-enddo
-paragraphe(Sorties)
-------
----* Màj. TabEtudiants
-iEtud = 0
-do while (iEtud < nbEtudiants AND tabEtudiants(iEtud) != nomEtud)
-   iEtud++
-enddo
-if (iEtud = nbEtudiants)
-   tabEtudiants(iEtud) = nomEtud
-   nbEtudiants++
-else
-   Sortir nomEtud, " est déjà inscrit dans la liste."
-endif
-------
----* Sorties
-iEtud = 0
-do while (iEtud < nbEtudiants)
-   Sortir tabEtudiants(iEtud)
-   iEtud++
-enddo
-------</textarea>
-            </div>
-            <div class="output">
-                <pre id="output"></pre>
+        <!-- Information box : save -->
+        <div class="overlay" id="informationBox__Save" style="display:none">
+            <div class="content">
+                <div class="information-box">
+                    <div class="head">
+                        <h3>Sauvegarder</h3>
+                        <a href="#" class="close" id="closeInformationBox__Save">x</a>
+                    </div>
+                    <div class="body">
+                        <p>Il est actuellement impossible de sauvegarder votre diagramme d'action en ligne, néanmoins,
+                        il vous est possible de sauvegarder un "copié-collé" des sources et/ou du diagramme sur votre ordinateur.</p>
+                        <p>Un "copié-collé" des sources vous permettra de revenir plus tard afin de continuer l'édition de votre diagramme ;
+                        un "copié-collé" du diagramme peut vous permettre d'imprimer le diagramme formatté depuis un éditeur de texte tel que Word Office.</p>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- End Information box : print -->
+
+        <!-- Window -->
+        <header>
+            <section class="input">
+                <div class="title">
+                    <h2>Pseudo Code Parser</h2>
+                    <a class="button" href="#" id="buttonSaveDiagram">Sauvegarder</a>
+                </div>
+                <div class="tools">
+                    <strong>Insérer :</strong>
+                    <a href="#" class="button" id="toolInsertCode__Bloc">Bloc principal</a>
+                    <a href="#" class="button" id="toolInsertCode__IfElse">If/else</a>
+                    <a href="#" class="button" id="toolInsertCode__Switch">Switch/case</a>
+                    <a href="#" class="button" id="toolInsertCode__DoWhile">Do while</a>
+                    <a href="#" class="button" id="toolInsertCode__Paragraph">Paragraphe</a>
+                    <a href="#" class="button" id="toolInsertCode__Module">Module</a>
+                </div>
+            </section>
+            <section class="output">
+                <div class="title">
+                    <h2>Aperçu</h2>
+                    <a class="button" href="#" id="buttonPrintDiagram">Imprimer</a>
+                </div>
+                <div class="tools">
+                    <strong>Options de rendu :</strong>
+                    <a href="#" class="button active" id="toolExtendedFormatting">Mise en forme étendue</a>
+                </div>
+            </section>
+        </header>
+
+        <main>
+            <textarea class="input" id="input" placeholder="Diagramme d'actions..."></textarea>
+            <pre class="output" id="output"></pre>
+        </main>
+        <!-- End Window -->
 
         <script type="text/javascript" src="scripts/PseudoCodeParser.js"></script>
         <script type="text/javascript" src="scripts/editor.js"></script>
