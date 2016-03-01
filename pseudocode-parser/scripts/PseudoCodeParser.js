@@ -22,16 +22,12 @@ function PseudoCodeParser(args) {
      * @var {Array} Array of symbols
      */
     this.symbols = [
-	    { pattern: "<=",      replacement: "&le;" },
-		{ pattern: "&lt;=",   replacement: "&le;" },
-		{ pattern: ">=",      replacement:  "&ge;" },
-		{ pattern: "&gt;=",   replacement: "&ge;" },
-		{ pattern: "!=",      replacement:  "&ne;" },
-		{ pattern: "->",      replacement:  "&rarr;" },
-		{ pattern: "-&gt;",   replacement: "&rarr;" },
-		{ pattern: "=>",      replacement:  "&rArr;" },
-		{ pattern: "=&gt;",   replacement: "&rArr;" },
-		{ pattern: "sqrt^",   replacement: "&radic;" }
+	    { pattern: /<=/g,      replacement: "&le;" },
+		{ pattern: />=/g,      replacement: "&ge;" },
+		{ pattern: /!=/g,      replacement: "&ne;" },
+		{ pattern: /->/g,      replacement: "&rarr;" },
+		{ pattern: /=>/g,      replacement: "&rArr;" },
+		{ pattern: /sqrt\^/g,  replacement: "&radic;" }
     ];
 
     /**
@@ -80,10 +76,13 @@ function PseudoCodeParser(args) {
      * @var {Array} Array of expressions (for extended formatting)
      */
     this.expressions = [
-        { pattern: /\[(.+)\]ent/i,          replacement: '<span style="color: #094ecd">[</span>$1<span style="color:#094ecd;">]<small>ENT</small></span>' },
-        { pattern: /\/\/ (.+)/i,            replacement: '<span style="color: #08a200">// $1</span>' },
-        { pattern: /^┌─── \* (.+)$/i,       replacement: '┌─── * <span style="color: #08a200">$1</span>' },
-        { pattern: /"(.+)"/i,               replacement: '<span style="color: #c61717">"$1"</span>' }
+        { pattern: /"([^"]+)"/ig,           replacement: '<span style="color: #c0392b">"$1"</span>' },
+        { pattern: /'([^']+)'/ig,           replacement: '<span style="color: #c0392b">\'$1\'</span>' },
+        { pattern: /\/\/ (.+)/i,            replacement: '<span style="color: #16a085">// $1</span>' },
+        { pattern: /\[([^\]]+)\]ent/ig,       replacement: '<span style="color: #094ecd">[</span>$1<span style="color: #094ecd">]<small>ENT</small></span>' },
+        { pattern: /^┌─── \* (.+)$/i,       replacement: '┌─── * <span style="color: #8e44ad">$1</span>' },
+        { pattern: /([a-zA-Z0-9]+)\(([^\(]+)\)/ig, replacement: '$1(<span style="color: #e67e22">$2</span>)' },
+        { pattern: /([a-zA-Z0-9]+)\[([^\]]+)\]/ig, replacement: '$1(<span style="color: #e67e22">$2</span>)' }
     ];
 
     /**
@@ -141,6 +140,7 @@ PseudoCodeParser.prototype.drawDiagram = function(string) {
     this.levelBlocks = 0;
 
     string = this.normalize(string);
+    console.log(string);
     lines = string.split("\n");
 
     lines.forEach(function (line, index, lines) {
@@ -186,9 +186,7 @@ PseudoCodeParser.prototype.normalize = function(string) {
  */
 PseudoCodeParser.prototype.replaceSymbols = function(string) {
     this.symbols.forEach(function (symbol, index) {
-        if (string.indexOf(symbol.pattern) >= 0) {
-            string = string.replace(symbol.pattern, symbol.replacement);
-        }
+        string = string.replace(symbol.pattern, symbol.replacement);
     });
     return string;
 };
@@ -246,8 +244,8 @@ PseudoCodeParser.prototype.addModules = function (string) {
     var parts = [];
     var border = "";
 
-    if (string.match(/module\((.+)\)/i)) {
-        var args = string.replace(/module\((.+)\)/i, function (whole, args) { return args; });
+    if (string.match(/module\(([^)]+)\)/i)) {
+        var args = string.replace(/module\(([^)]+)\)/i, function (whole, args) { return args; });
         var parameters = args.split(";");
 
         var title = (0 in parameters && parameters[0].length > 0) ? parameters[0] : "";
@@ -264,8 +262,8 @@ PseudoCodeParser.prototype.addModules = function (string) {
 
         string = parts.join("\n");
     }
-    else if (string.match(/paragraph[e]?\((.+)\)/i)) {
-        var args = string.replace(/paragraph[e]?\((.+)\)/i, function (whole, args) { return args; });
+    else if (string.match(/paragraph[e]?\(([^(]+)\)/i)) {
+        var args = string.replace(/paragraph[e]?\(([^(]+)\)/i, function (whole, args) { return args; });
         var parameters = args.split(";");
 
         var title = (0 in parameters && parameters[0].length > 0) ? parameters[0] : "";
@@ -337,13 +335,13 @@ PseudoCodeParser.prototype.colorKeywords = function(string) {
  */
 PseudoCodeParser.prototype.colorExpressions = function(string) {
     var expressionIndex = 0;
+    var expressions = [];
 
-    while (expressionIndex < this.expressions.length && !string.match(this.expressions[expressionIndex].pattern)) {
+    while (expressionIndex < this.expressions.length) {
+        if (string.match(this.expressions[expressionIndex].pattern)) {
+            string = string.replace(this.expressions[expressionIndex].pattern, this.expressions[expressionIndex].replacement);
+        }
         expressionIndex++;
-    }
-
-    if (expressionIndex < this.expressions.length) {
-        string = string.replace(this.expressions[expressionIndex].pattern, this.expressions[expressionIndex].replacement);
     }
 
     return string;

@@ -1,4 +1,5 @@
 var buttonOpen = document.getElementById("buttonOpenDiagram");
+var buttonOpenExample = document.getElementById("buttonOpenDiagramWithExample");
 var buttonSave = document.getElementById("buttonSaveDiagram");
 var buttonPrint = document.getElementById("buttonPrintDiagram");
 
@@ -32,6 +33,20 @@ buttonOpen.addEventListener("click", function (event) {
     panel.style.display = "none";
 
     inputAera.focus();
+});
+
+buttonOpenExample.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    var panel = document.getElementById("welcomePanel");
+
+    buttonOpen.removeEventListener("click", function () {});
+    panel.style.display = "none";
+
+    inputAera.value = "// Exemple\n\n// On souhaite ajouter, dans un tableau, des personnes identifiées par leurs noms\n// et prénoms. Ensuite, on souhaite afficher à l'écran le contenu du tableau.\n\n---* Exemple de diagramme\nnbPers = 0\nObtenir nomPrénom\n\ndo while (nomPrénom != \"ZZZ\")\n   module(AjoutPersonne;tabPersonnes, nbPersonnes, nomPrénom;tabPersonnes, nbPersonnes)\n   Obtenir nomPrénom\nenddo\nparagraphe(Sorties)\n------\n\n---* AjoutPersonne\niPers = 0\ndo while (iPers < nbPers AND tabPers[iPers] != nomPrénom)\n   iPers++\nenddo\nif (iPers = nbPers)\n   tabPers[iPers] = nomPrénom\nelse\n   Sortir nomPrénom, \"est déjà présent dans le tableau.\"\nendif\n------\n\n---* Sorties\niPers = 0\ndo while (iPers < nbPers)\n   Sortir tabPers[iPers]\n   iPers++\nenddo\n------";
+    inputAera.focus();
+
+    drawDiagram();
 });
 
 buttonSave.addEventListener("click", function (event) {

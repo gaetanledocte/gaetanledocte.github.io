@@ -267,7 +267,7 @@ main {
 
         font-family: Monaco, Lucida Console, Courier New, Consolas, monospace, serif;
         font-size: 0.85rem;
-        line-height: 1rem;
+        line-height: 1.25rem;
         color: white;
     }
     main .output {
