@@ -1,164 +1,88 @@
 /**
- * Constructor
+ * Pseudo Code Parser
+ *
+ * @author Gaëtan Le Docte <gaetan.ledocte@gmail.com>
  */
-function PseudoCodeParser(args) {
+var PseudoCodeParser = function () {
     /**
-     * @var {Array} Array of blocks delimiters
+     * All blocks delimiters
+     * @var {Array}
      */
     this.delimiters = [
-        { pattern: /---\*/i,    replacement: "┌─── *",      borderType: 1 },
-        { pattern: /---[-]+/i,  replacement: "└─────────",  borderType: 0 },
-        { pattern: /\bendif\b/i,    replacement: "└──",         borderType: 0 },
-        { pattern: /\b___\b/i,      replacement: "└──",         borderType: 0 },
-        { pattern: /\belseif\b/i,   replacement: "├── if",      borderType: -1 },
-        { pattern: /\belse\b/i,     replacement: "├── else",    borderType: -1 },
-        { pattern: /\bif\b/i,       replacement: "┌── if",      borderType: 1 },
-        { pattern: /\benddo\b/i,    replacement: "╙──",         borderType: 0 },
-        { pattern: /\b===\b/i,      replacement: "╙──",         borderType: 0 },
-        { pattern: /\bdo\b/i,       replacement: "╔══ do",      borderType: 2 }
-    ];
+        { pattern: /---\*/i,        replacement: "┌─── *",      border: "│" },
+        { pattern: /---[-]+/i,      replacement: "└──────────", border: false },
+        { pattern: /\bif\b/i,       replacement: "┌── if",      border: "│" },
+        { pattern: /\belseif\b/i,   replacement: "├── if",      border: true },
+        { pattern: /\belse\b/i,     replacement: "├── else",    border: true },
+        { pattern: /\bendif\b/i,    replacement: "└──",         border: false },
+        { pattern: /\b___\b/i,      replacement: "└──",         border: false },
+        { pattern: /\bdo\b/i,       replacement: "╔══ do",      border: "║" },
+        { pattern: /\benddo\b/i,    replacement: "╙──",         border: false },
+        { pattern: /\b===\b/i,      replacement: "╙──",         border: false }
+     ];
 
     /**
-     * @var {Array} Array of symbols
+     * Symbols
+     * @var {Array}
      */
     this.symbols = [
-	    { pattern: /<=/g,      replacement: "&le;" },
-		{ pattern: />=/g,      replacement: "&ge;" },
-		{ pattern: /!=/g,      replacement: "&ne;" },
-		{ pattern: /->/g,      replacement: "&rarr;" },
-		{ pattern: /=>/g,      replacement: "&rArr;" },
-		{ pattern: /sqrt\^/g,  replacement: "&radic;" }
+        { pattern: /<=/g,      replacement: "≤" },
+ 		{ pattern: />=/g,      replacement: "≥" },
+ 		{ pattern: /!=/g,      replacement: "≠" },
+ 		{ pattern: /->/g,      replacement: "→" },
+ 		{ pattern: /=>/g,      replacement: "⇒" },
+ 		{ pattern: /sqrt\^/g,  replacement: "√" }
     ];
 
     /**
-     * @var {Array} Array of reserved keywords (for extended formatting)
-     */
-    this.reservedKeywords = [
-        // Colored in green
-        // - English keywords
-        { keyword: "get",       color: "#08a200" },
-        { keyword: "print",     color: "#08a200" },
-        { keyword: "return",    color: "#08a200" },
-        { keyword: "free",      color: "#08a200" },
-        // - French keywords
-        { keyword: "obtenir",   color: "#08a200" },
-        { keyword: "sortir",    color: "#08a200" },
-        { keyword: "libérer",   color: "#08a200" },
-        { keyword: "liberer",   color: "#08a200" },
-
-        // Colored in blue
-        // - English keywords
-        { keyword: "and",   color: "#094ecd" },
-        { keyword: "or",    color: "#094ecd" },
-        { keyword: "if",    color: "#094ecd" },
-        { keyword: "else",  color: "#094ecd" },
-        { keyword: "do",    color: "#094ecd" },
-        { keyword: "times", color: "#094ecd" },
-        { keyword: "until", color: "#094ecd" },
-        { keyword: "while", color: "#094ecd" },
-        { keyword: "is",    color: "#094ecd" },
-        { keyword: "not",   color: "#094ecd" },
-        { keyword: "than",  color: "#094ecd" },
-        { keyword: "break", color: "#094ecd" },
-        { keyword: "stop",  color: "#094ecd" },
-        { keyword: "hv",    color: "#094ecd" },
-        { keyword: "lv",    color: "#094ecd" },
-        { keyword: "true",  color: "#094ecd" },
-        { keyword: "false", color: "#094ecd" },
-        { keyword: "null",  color: "#094ecd" },
-        { keyword: "nil",   color: "#094ecd" },
-        // - French keywords
-        { keyword: "vrai",   color: "#094ecd" },
-        { keyword: "faux",   color: "#094ecd" }
-    ];
-
-    /**
-     * @var {Array} Array of expressions (for extended formatting)
+     * Expressions
+     * @var {Array}
      */
     this.expressions = [
-        { pattern: /"([^"]+)"/ig,           replacement: '<span style="color: #c0392b">"$1"</span>' },
-        { pattern: /'([^']+)'/ig,           replacement: '<span style="color: #c0392b">\'$1\'</span>' },
-        { pattern: /\/\/ (.+)/i,            replacement: '<span style="color: #16a085">// $1</span>' },
-        { pattern: /\[([^\]]+)\]ent/ig,       replacement: '<span style="color: #094ecd">[</span>$1<span style="color: #094ecd">]<small>ENT</small></span>' },
-        { pattern: /^┌─── \* (.+)$/i,       replacement: '┌─── * <span style="color: #8e44ad">$1</span>' },
-        { pattern: /([a-zA-Z0-9]+)\(([^\(]+)\)/ig, replacement: '$1(<span style="color: #e67e22">$2</span>)' },
-        { pattern: /([a-zA-Z0-9]+)\[([^\]]+)\]/ig, replacement: '$1(<span style="color: #e67e22">$2</span>)' }
+        { pattern: /"([^"\n]*)"/ig,         replacement: '<span style="color: #E01931">"$1"</span>' },
+        { pattern: /'([^'\n]*)'/ig,         replacement: '<span style="color: #E01931">\'$1\'</span>' },
+        { pattern: /\/\/ (.*)/ig,           replacement: '<span style="color: #16a085">// $1</span>' },
+        { pattern: /\/\*([^*/]*)\*\//ig,    replacement: '<span style="color: #16a085">/*$1*/</span>' },
+        { pattern: /\[([^\]]+)\]ent/ig,     replacement: '<span style="color: #973939">[</span>$1<span style="color: #973939">]<small>ENT</small></span>' },
+        { pattern: /┌─── \* (.*)/ig,        replacement: '┌─── * <span style="color: #27AE60"><strong>$1</strong></span>' },
+        { pattern: /([a-zA-Z0-9]+)\(([^\(]+)\)/ig, replacement: '$1(<span style="color: #FF7416">$2</span>)' },
+        { pattern: /([a-zA-Z0-9]+)\[([^\]]+)\]/ig, replacement: '$1(<span style="color: #FF7416">$2</span>)' },
+        { pattern: /\b(if|else|do|while|until|times|and|or|is|not|than)\b/ig,       replacement: '<span style="color: #1C57E1">$1</span>' },
+        { pattern: /\b(true|false|break|stop|vrai|faux|hv|lv|null|nil)\b/ig,        replacement: '<span style="color: #1C57E1">$1</span>' },
+        { pattern: /\b(obtenir|sortir|libérer|liberer|get|print|return|free)\b/ig,  replacement: '<span style="color: #27AE60">$1</span>' }
     ];
-
-    /**
-     * @var boolean
-     */
-    this.extendedFormatting = (args.extendedFormatting) ? args.extendedFormatting : false;
-
-    /**
-     * @var {Array} Border types
-     */
-    this.borderTypes = [
-        '', '│', '║'
-    ];
-
-    /**
-     * @var {String} Reserved keywords, separated by "|" in a string
-     *
-     * Auto-generated !
-     */
-    var keywordsString = "";
-
-    for (var i in this.reservedKeywords) {
-        keywordsString += this.reservedKeywords[i].keyword + "|";
-    }
-
-    keywordsString = keywordsString.substr(0, keywordsString.length - 1);
-
-    this.reservedKeywordsString = keywordsString;
-
-     /**
-      * @var {Object} Used as an associative array
-      *
-      * Auto-generated !
-      */
-    this.blocks = {};
-
-    /**
-     * @var int
-     *
-     * Auto-generated !
-     */
-    this.levelBlocks = 0;
 };
 
 /**
- * Draw the action diagram
+ * Draw action diagram from pseudo code
  *
- * @param {String} string Diagram description
+ * @param {String} text Pseudo code
  * @return {String}
  */
-PseudoCodeParser.prototype.drawDiagram = function(string) {
+PseudoCodeParser.prototype.drawDiagram = function (text, extendedFormatting) {
     var lines;
 
-    this.blocks = {};
-    this.levelBlocks = 0;
+    this.borders = "";
 
-    string = this.normalize(string);
-    console.log(string);
-    lines = string.split("\n");
+    text = this.normalize(text);
+    text = this.replaceSymbols(text);
+    text = this.parseModules(text);
 
-    lines.forEach(function (line, index, lines) {
-        line = line.trim();
-        line = this.replaceSymbols(line);
-        line = this.addModules(line);
-        line = this.addBlocks(line);
+    lines = text.split("\n");
 
-        if (this.extendedFormatting) {
-            line = this.colorExpressions(line);
-            line = this.colorKeywords(line);
-        }
-
+    lines.forEach(function (value, index, lines) {
+        var line = value.trim();
+        line = this.parseBlock(line);
         lines[index] = line;
     }, this);
 
-    string = lines.join("\n");
-    return string;
+    text = lines.join("\n");
+
+    if (extendedFormatting) {
+        text = this.replaceExpressions(text);
+    }
+
+    return text;
 };
 
 /**
@@ -184,99 +108,113 @@ PseudoCodeParser.prototype.normalize = function(string) {
  * @param {String} string
  * @return {String}
  */
-PseudoCodeParser.prototype.replaceSymbols = function(string) {
-    this.symbols.forEach(function (symbol, index) {
+PseudoCodeParser.prototype.replaceSymbols = function (string) {
+    this.symbols.forEach(function (symbol) {
         string = string.replace(symbol.pattern, symbol.replacement);
     });
     return string;
 };
 
 /**
- * Create blocks
+ * Replace expressions
  *
  * @param {String} string
  * @return {String}
  */
-PseudoCodeParser.prototype.addBlocks = function(string) {
-    var delimiterIndex = 0;
+PseudoCodeParser.prototype.replaceExpressions = function (string) {
+    this.expressions.forEach(function (expression) {
+        string = string.replace(expression.pattern, expression.replacement);
+    });
+    return string;
+};
 
-    while (delimiterIndex < this.delimiters.length && !string.match(this.delimiters[delimiterIndex].pattern)) {
-        delimiterIndex++;
-    }
+/**
+ * Looking for module/paragraph expression and create the correspondant block
+ *
+ * @param {String} string
+ * @return string
+ */
+PseudoCodeParser.prototype.parseModules = function (string) {
+    string = string.replace(/paragraph[e]?\((.+)\)/g, (function (match, title) {
+        return this.createModule(title, "", "", {
+            topLeft:    '┌',    topRight:   '┐',
+            bottomLeft: '└',    bottomRight:'┘',
+        });
+    }).bind(this));
 
-    if (delimiterIndex != this.delimiters.length) {
-        var pattern = this.delimiters[delimiterIndex].pattern;
-        var replacement = this.delimiters[delimiterIndex].replacement;
-        var borderType = this.delimiters[delimiterIndex].borderType;
+    string = string.replace(/module?\(([^;)]+)[;]?([^;)]*)[;]?([^)]*)\)/ig, (function (match, title, inputs, outputs) {
+        inputs = (inputs.trim().length > 0) ? " ↓ " + inputs : "";
+        outputs = (outputs.trim().length > 0) ? " ↓ " + outputs : "";
 
-        string = string.replace(pattern, replacement);
-
-        if (borderType == 0) {
-            this.blocks[--this.levelBlocks] = 0;
-            string = this.borders(false) + string;
-        }
-        else if (borderType > 0) {
-            string = this.borders(false) + string;
-            this.blocks[this.levelBlocks++] = borderType;
-        }
-        else {
-            // In "else" and "else if" special cases, we don't need to add a new block
-            // We just need to repeat the border of the parent "if" block
-            this.blocks[this.levelBlocks - 1] = 0;
-            string = this.borders(false) + string;
-            this.blocks[this.levelBlocks - 1] = 1;
-        }
-    }
-    else {
-        string = this.borders(true) + string;
-    }
+        return this.createModule(title, inputs, outputs, {
+            topLeft:    'o',    topRight:   'o',
+            bottomLeft: 'o',    bottomRight:'o',
+        });
+    }).bind(this));
 
     return string;
 };
 
 /**
- * Create modules and paragraphs blocks
+ * Create a module block
  *
- * @param {String} string
+ * @param {String} title
+ * @param {String} inputs
+ * @param {String} outputs
+ * @param {Object} corners
  * @return {String}
  */
-PseudoCodeParser.prototype.addModules = function (string) {
-    var parts = [];
+PseudoCodeParser.prototype.createModule = function (title, inputs, outputs, corners) {
+    var block = "";
     var border = "";
 
-    if (string.match(/module\(([^)]+)\)/i)) {
-        var args = string.replace(/module\(([^)]+)\)/i, function (whole, args) { return args; });
-        var parameters = args.split(";");
-
-        var title = (0 in parameters && parameters[0].length > 0) ? parameters[0] : "";
-        var inputs = (1 in parameters && parameters[1].length > 0) ? " ↓ " + parameters[1] : "";
-        var outputs = (2 in parameters && parameters[2].length > 0) ? " ↓ " + parameters[2] : "";
-
-        for (var i = 0; i < title.length; i++) {
-            border += "─";
-        }
-
-        parts[0] = "o─" + border + "─o" + inputs;
-        parts[1] = this.borders(true) + "│ " + title + " │";
-        parts[2] = this.borders(true) + "o─" + border + "─o" + outputs;
-
-        string = parts.join("\n");
+    for (var i = 0; i < title.length; i++) {
+        border += "─";
     }
-    else if (string.match(/paragraph[e]?\(([^(]+)\)/i)) {
-        var args = string.replace(/paragraph[e]?\(([^(]+)\)/i, function (whole, args) { return args; });
-        var parameters = args.split(";");
 
-        var title = (0 in parameters && parameters[0].length > 0) ? parameters[0] : "";
+    block += corners.topLeft + "─" + border + "─" + corners.topRight + inputs + "\n";
+    block += "│ " + title  + " │\n";
+    block += corners.bottomLeft + "─" + border + "─" + corners.bottomRight + outputs;
 
-        for (var i = 0; i < title.length; i++) {
-            border += "─";
-        }
+    return block;
+};
 
-        parts[0] = "┌─" + border + "─┐";
-        parts[1] = this.borders(true) + "│ " + title + " │";
-        parts[2] = this.borders(true) + "└─" + border + "─┘";
+ /**
+  * Looking for a block delimiter and replace it
+  *
+  * @param {String} string
+  * @return {String}
+  */
+PseudoCodeParser.prototype.parseBlock = function (string) {
+    var index;
+    var firstWord;
+    var delimiters = [
+        "---*", "------",
+        "if", "elseif", "else", "endif", "___",
+        "do", "enddo", "==="
+    ];
 
-        string = parts.join("\n");
+    firstWord = (string.match(/^[a-z-_\*=]+/i)) ? string.match(/^[a-z-_\*=]+/i)[0] : "";
+
+    if (firstWord.length === 0 || delimiters.indexOf(firstWord) < 0) {
+        return this.addBorders(string, "", true);
+    }
+
+    // -------------------------------------------------------------------------
+
+    index = 0;
+
+    while (index < this.delimiters.length && !string.match(this.delimiters[index].pattern)) {
+        index++;
+    }
+
+    if (index < this.delimiters.length) {
+        var pattern = this.delimiters[index].pattern;
+        var replacement = this.delimiters[index].replacement;
+        var border = this.delimiters[index].border;
+
+        string = string.replace(pattern, replacement);
+        string = this.addBorders(string, border, false);
     }
 
     return string;
@@ -285,64 +223,23 @@ PseudoCodeParser.prototype.addModules = function (string) {
 /**
  * Add left borders
  *
- * @param boolean addWhitespace Add a whitespace next to the borders
- * @return {String}
- */
-PseudoCodeParser.prototype.borders = function(addWhitespace) {
-    var borders = "";
-
-    for (var i in this.blocks) {
-        borders += this.borderTypes[this.blocks[i]];
-    }
-
-    return (addWhitespace) ? borders + " " : borders;
-};
-
-/**
- * Set color to reserved keywords
- *
  * @param {String} string
+ * @param {String}|boolean border
+ * @param boolean whitespace
  * @return {String}
  */
-PseudoCodeParser.prototype.colorKeywords = function(string) {
-    var keywordsRegExp = new RegExp("\\b(" + this.reservedKeywordsString + ")\\b", "ig");
+PseudoCodeParser.prototype.addBorders = function (string, border, whitespace) {
+    var borders = this.borders;
 
-    if (string.match(keywordsRegExp)) {
-        string = string.replace(keywordsRegExp, (function (keyword) {
-            var keywordIndex = 0;
-            var keywordLowerCase = keyword.toLowerCase();
+    if (typeof border === "string" && border.length > 0) {
+        this.borders += border;
+    } else if (typeof border === "boolean") {
+        borders = borders.substring(0, borders.length - 1);
 
-            while (keywordIndex < this.reservedKeywords.length && this.reservedKeywords[keywordIndex].keyword != keywordLowerCase) {
-                keywordIndex++;
-            }
-
-            if (keywordIndex < this.reservedKeywords.length) {
-                keyword = '<span style="color:' + this.reservedKeywords[keywordIndex].color + '">' + keyword + '</span>';
-            }
-
-            return keyword;
-        }).bind(this));
-    }
-
-    return string;
-};
-
-/**
- * Extended formatting for expressions
- *
- * @param {String} string
- * @return {String}
- */
-PseudoCodeParser.prototype.colorExpressions = function(string) {
-    var expressionIndex = 0;
-    var expressions = [];
-
-    while (expressionIndex < this.expressions.length) {
-        if (string.match(this.expressions[expressionIndex].pattern)) {
-            string = string.replace(this.expressions[expressionIndex].pattern, this.expressions[expressionIndex].replacement);
+        if (!border) {
+            this.borders = borders;
         }
-        expressionIndex++;
     }
 
-    return string;
+    return (whitespace) ? borders + " " + string : borders + string;
 };

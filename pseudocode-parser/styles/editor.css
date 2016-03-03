@@ -261,6 +261,7 @@ main {
     }
     main .input {
         left: 0;
+        padding-bottom: 0;
 
         background-color: #444444;
         border-width: 0;
