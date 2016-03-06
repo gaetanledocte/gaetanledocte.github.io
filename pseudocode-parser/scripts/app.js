@@ -12,6 +12,8 @@ var buttonInsertParagraph = document.getElementById("buttonInsert__Paragraph");
 var buttonInsertModule = document.getElementById("buttonInsert__Module");
 var buttonExtendedFormatting = document.getElementById("buttonExtendedFormatting");
 
+var informationBoxSave = document.getElementById("informationBox__Save");
+
 var input = document.getElementById("input");
 var output = document.getElementById("output");
 var inputValue = input.value;
@@ -31,10 +33,13 @@ var insert = function (input, text) {
     var after = input.value.substring(position, input.value.length);
 
     input.value = before + text + after;
+    input.selectionStart = position + text.length;
+    input.selectionEnd = input.selectionStart;
+    input.focus();
 };
 
 var save = function () {
-    document.getElementById("informationBox__Save").style.display = "block";
+    informationBoxSave.style.display = "block";
 };
 
 //------------------------------------------------------------------------------
@@ -51,8 +56,13 @@ document.addEventListener("keypress", function (event) {
 input.addEventListener("keypress", function (event) {
     // Tab
     if (event.keyCode === 9) {
+        var cursor;
         event.preventDefault();
+
+        cursor = input.selectionStart;
         insert(input, "   ");
+        input.selectionStart = cursor + 3;
+        input.selectionEnd = input.selectionStart;
     }
 });
 input.addEventListener("keyup", function () {
@@ -133,9 +143,11 @@ buttonExtendedFormatting.addEventListener("click", function (event) {
 
     if (this.classList.contains("active")) {
         this.classList.remove("active");
+        this.textContent = "Mise en forme désactivée";
         extendedFormatting = false;
     } else {
         this.classList.add("active");
+        this.textContent = "Mise en forme activée";
         extendedFormatting = true;
     }
 

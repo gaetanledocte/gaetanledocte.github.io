@@ -6,6 +6,7 @@
 var PseudoCodeParser = function () {
     /**
      * All blocks delimiters
+     * 
      * @var {Array}
      */
     this.delimiters = [
@@ -23,6 +24,7 @@ var PseudoCodeParser = function () {
 
     /**
      * Symbols
+     * 
      * @var {Array}
      */
     this.symbols = [
@@ -36,20 +38,61 @@ var PseudoCodeParser = function () {
 
     /**
      * Expressions
+     * 
      * @var {Array}
      */
     this.expressions = [
         { pattern: /"([^"\n]*)"/ig,         replacement: '<span style="color: #E01931">"$1"</span>' },
         { pattern: /'([^'\n]*)'/ig,         replacement: '<span style="color: #E01931">\'$1\'</span>' },
+        { pattern: /\{(.*)\|(.*)\}/ig,      replacement: '<span style="color: $2">$1</span>' },
+        { pattern: /\{(.*)\}/ig,            replacement: '<span style="color: #1C57E1">$1</span>' },
         { pattern: /\/\/ (.*)/ig,           replacement: '<span style="color: #16a085">// $1</span>' },
         { pattern: /\/\*([^*/]*)\*\//ig,    replacement: '<span style="color: #16a085">/*$1*/</span>' },
         { pattern: /\[([^\]]+)\]ent/ig,     replacement: '<span style="color: #973939">[</span>$1<span style="color: #973939">]<small>ENT</small></span>' },
         { pattern: /┌─── \* (.*)/ig,        replacement: '┌─── * <span style="color: #27AE60"><strong>$1</strong></span>' },
-        { pattern: /([a-zA-Z0-9]+)\(([^\(]+)\)/ig, replacement: '$1(<span style="color: #FF7416">$2</span>)' },
-        { pattern: /([a-zA-Z0-9]+)\[([^\]]+)\]/ig, replacement: '$1(<span style="color: #FF7416">$2</span>)' },
         { pattern: /\b(if|else|do|while|until|times|and|or|is|not|than)\b/ig,       replacement: '<span style="color: #1C57E1">$1</span>' },
         { pattern: /\b(true|false|break|stop|vrai|faux|hv|lv|null|nil)\b/ig,        replacement: '<span style="color: #1C57E1">$1</span>' },
-        { pattern: /\b(obtenir|sortir|libérer|liberer|get|print|return|free)\b/ig,  replacement: '<span style="color: #27AE60">$1</span>' }
+        { pattern: /\b(obtenir|sortir|libérer|liberer|traiter|get|print|return|free|process)\b/ig,  replacement: '<span style="color: #27AE60">$1</span>' },
+        {
+            pattern: /([a-z0-9]+)\(([^=.\n]*)\)/ig,
+            replacement: function (match, title, content) {
+                if (content.length > 0) {
+                    var index = "(";
+
+                    content.split(")(").forEach(function (value) {
+                        value.split(",").forEach(function (v) {
+                            index += '<span style="color: #FF7416">' + v + '</span>,';
+                        });
+                        index = index.substring(0, index.length - 1);
+                        index += ")(";
+                    });
+
+                    return title + index.substring(0, index.length - 1);
+                } else {
+                    return title + "()";
+                }
+            }
+        },
+        {
+            pattern: /([a-z0-9]+)\[([a-z0-9 +,]*)\]/ig,
+            replacement: function (match, title, content) {
+                if (content.length > 0) {
+                    var index = "(";
+
+                    content.split("][").forEach(function (value) {
+                        value.split(",").forEach(function (v) {
+                            index += '<span style="color: #FF7416">' + v + '</span>,';
+                        });
+                        index = index.substring(0, index.length - 1);
+                        index += ")(";
+                    });
+
+                    return title + index.substring(0, index.length - 1);
+                } else {
+                    return title + "()";
+                }
+            }
+        }
     ];
 };
 
@@ -142,7 +185,7 @@ PseudoCodeParser.prototype.parseModules = function (string) {
         });
     }).bind(this));
 
-    string = string.replace(/module?\(([^;)]+)[;]?([^;)]*)[;]?([^)]*)\)/ig, (function (match, title, inputs, outputs) {
+    string = string.replace(/module?\(([^;)\n]+)[;]?([^;)\n]*)[;]?([^)\n]*)\)/ig, (function (match, title, inputs, outputs) {
         inputs = (inputs.trim().length > 0) ? " ↓ " + inputs : "";
         outputs = (outputs.trim().length > 0) ? " ↓ " + outputs : "";
 
@@ -167,8 +210,9 @@ PseudoCodeParser.prototype.parseModules = function (string) {
 PseudoCodeParser.prototype.createModule = function (title, inputs, outputs, corners) {
     var block = "";
     var border = "";
+    var length = title.length;
 
-    for (var i = 0; i < title.length; i++) {
+    for (var i = 0; i < length; i++) {
         border += "─";
     }
 
@@ -187,6 +231,7 @@ PseudoCodeParser.prototype.createModule = function (title, inputs, outputs, corn
   */
 PseudoCodeParser.prototype.parseBlock = function (string) {
     var index;
+    var length;
     var firstWord;
     var delimiters = [
         "---*", "------",
@@ -203,18 +248,17 @@ PseudoCodeParser.prototype.parseBlock = function (string) {
     // -------------------------------------------------------------------------
 
     index = 0;
+    length = this.delimiters.length;
 
-    while (index < this.delimiters.length && !string.match(this.delimiters[index].pattern)) {
+    while (index < length && !string.match(this.delimiters[index].pattern)) {
         index++;
     }
 
-    if (index < this.delimiters.length) {
-        var pattern = this.delimiters[index].pattern;
-        var replacement = this.delimiters[index].replacement;
-        var border = this.delimiters[index].border;
+    if (index < length) {
+        var delimiter = this.delimiters[index];
 
-        string = string.replace(pattern, replacement);
-        string = this.addBorders(string, border, false);
+        string = string.replace(delimiter.pattern, delimiter.replacement);
+        string = this.addBorders(string, delimiter.border, false);
     }
 
     return string;
