@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Editeur de diagrammes d'actions (pseudo-code)</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Oxygen+Mono">
+
+        <link rel="stylesheet" href="styles/reset.css" media="all">
+        <link rel="stylesheet" href="styles/app.css" media="screen">
+        <link rel="stylesheet" href="styles/editor.css" media="screen">
+        <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
+        <link rel="stylesheet" href="styles/print.css" media="print">
+
+        <script src="scripts/PseudoCodeParser.js"></script>
+    </head>
+    <body>
+        <div id="welcomePanel" class="welcome">
+            <div class="content">
+                <h1>Editeur de diagrammes d'actions</h1>
+                <h2>(parseur de pseudo-code)</h2>
+
+                <a href="#" class="button" id="buttonOpen" title="Ouvrir l'éditeur de diagramme(s) d'actions">Accéder à l'éditeur</a>
+                <p class="sub-button">
+                    Besoin d'un <a href="#" id="buttonOpenWithExample" title="Ouvrir l'éditeur de diagramme(s) d'actions avec un exemple de code">exemple d'utilisation</a> ?
+                </p>
+                <p class="copyright">
+                    Development version - Alpha v0.2.0<br>
+                    A free-project from <a href="https://www.github.com/gaetanld" target="_blank" title="Gaëtan Le Docte's Github Profile">@gaetanld</a>.
+                </p>
+            </div>
+        </div>
+
+        <header class="header" id="header">
+            <h2 class="project-title">Editeur de diagrammes d'actions (pseudo-code)</h2>
+        </header>
+
+        <main class="main">
+            <aside class="sidebar" id="sidebar">
+                <h2 class="title">Explorateur</h2>
+            </aside>
+
+            <section class="editor" id="editor">
+                <div class="toolbar" id="toolbar">
+                    <h2 class="title">Editeur</h2>
+
+                    <div class="tools">
+                        <a href="#" class="item" id="buttonInsert__Main">Bloc principal</a>
+                        <a href="#" class="item" id="buttonInsert__Condition">Condition</a>
+                        <a href="#" class="item" id="buttonInsert__Switch">Switch</a>
+                        <a href="#" class="item" id="buttonInsert__Loop">Boucle</a>
+                        <a href="#" class="item" id="buttonInsert__Module">Module</a>
+                        <a href="#" class="item" id="buttonInsert__Paragraph">Paragraphe</a>
+                    </div>
+                </div>
+                <textarea id="input" class="input" placeholder="Diagramme(s) d'actions (pseudo-code)..."></textarea>
+            </section>
+
+            <section class="preview" id="preview">
+                <div class="toolbar" id="toolbar">
+                    <h2 class="title">Résultat</h2>
+
+                    <div class="tools">
+                        <a href="#" class="item space-right" id="buttonReload">Actualiser</a>
+                        <a href="#" class="item active" id="buttonLiveReload">Aperçu en direct</a>
+                        <a href="#" class="item active" id="buttonExtendedFormatting">Mise en forme étendue</a>
+                        <a href="#" class="item space-around" id="buttonPrint">Imprimer</a>
+                    </div>
+                </div>
+                <pre id="output" class="output pcp-highlight"></pre>
+            </section>
+        </main>
+
+        <script src="scripts/app.js"></script>
+    </body>
+</html>

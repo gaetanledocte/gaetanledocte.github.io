@@ -1,10 +1,10 @@
-.welcome,
-header,
-#input {
+.header,
+.sidebar,
+.editor,
+.preview .toolbar {
     display: none;
 }
-
-#output {
+.preview .output {
     font-family: Monaco, Consolas, Courier New, Lucida Console, monospace, serif;
     font-size: 10pt;
     line-height: 11pt;

@@ -1,0 +1,133 @@
+body {
+    overflow: hidden;
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    padding: 0 1rem;
+
+    line-height: 60px;
+}
+    .header .project-title {
+        display: inline-block;
+
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+.main {
+
+}
+    .main .sidebar,
+    .main .editor,
+    .main .preview {
+        float: left;
+    }
+    .main .sidebar {
+        width: 0px; /* not already implemented */
+
+        background-color: #222;
+    }
+    .main .editor {
+        width: 500px;
+
+        background-color: #2a2a2a;
+    }
+        .main .sidebar .title,
+        .main .editor .toolbar,
+        .main .preview .toolbar {
+            height: 50px;
+            padding: 0 1rem;
+
+            font-size: 0.9rem;
+            line-height: 50px;
+        }
+        .main .sidebar .title,
+        .main .editor .toolbar {
+            background-color: rgba(0,0,0,0.25);
+
+            color: white;
+        }
+        .main .preview .toolbar {
+            background-color: #dedede;
+
+            color: #222;
+        }
+            .main .editor .toolbar .title,
+            .main .preview .toolbar .title,
+            .main .editor .toolbar .tools,
+            .main .preview .toolbar .tools {
+                display: inline-block;
+            }
+            .main .editor .toolbar .tools,
+            .main .preview .toolbar .tools {
+                padding: 0 1rem;
+            }
+                .main .editor .toolbar .tools .item,
+                .main .preview .toolbar .tools .item {
+                    padding: 0.25rem 0.45rem;
+                    margin: 0 0.1rem;
+
+                    border-radius: 3px;
+
+                    font-size: 0.8rem;
+                    text-decoration: none;
+                }
+                .main .editor .toolbar .tools .item.space-around,
+                .main .preview .toolbar .tools .item.space-around {
+                    margin: 0 1rem;
+                }
+                .main .editor .toolbar .tools .item.space-right,
+                .main .preview .toolbar .tools .item.space-right {
+                    margin-right: 1rem;
+                }
+                .main .editor .toolbar .tools .item {
+                    background-color: rgba(0,0,0,0.25);
+
+                    color: rgba(255,255,255,0.75);
+                }
+                .main .editor .toolbar .tools .item:hover {
+                    background-color: black;
+
+                    color: white;
+                }
+                .main .preview .toolbar .tools .item {
+                    background-color: #bebebe;
+
+                    color: #444;
+                }
+                .main .preview .toolbar .tools .item:hover {
+                    background-color: white;
+
+                    color: black;
+                }
+                .main .editor .toolbar .tools .item.active,
+                .main .preview .toolbar .tools .item.active {
+                    background-color: #27ae60;
+
+                    color: white;
+                }
+        .main .editor .input,
+        .main .preview .output {
+            display: block;
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            padding: 1rem;
+
+            font-family: Monaco, Consolas, Courier New, Lucida Console, monospace, serif;
+            font-size: 10pt;
+            line-height: 11pt;
+
+            overflow: auto;
+        }
+        .main .editor .input {
+            background-color: transparent;
+            border: none;
+
+            color: white;
+        }
+        .main .preview .output {
+            color: #222;
+        }

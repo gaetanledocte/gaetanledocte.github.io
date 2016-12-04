@@ -1,0 +1,22 @@
+.pcp-highlight .diagram-title {
+    color: #27ae60;
+    font-weight: bold;
+}
+.pcp-highlight .quote {
+    color: #e01931;
+}
+.pcp-highlight .comment {
+    color: #16a085;
+}
+.pcp-highlight .reserved-word {
+    color: #1c57e1;
+}
+.pcp-highlight .keyword {
+    color: #27ae60;
+}
+.pcp-highlight .array {
+    color: #FF7416;
+}
+.pcp-highlight .whole-part {
+    color: #973939;
+}
