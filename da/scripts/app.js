@@ -14,7 +14,8 @@ var parser = new PseudoCodeParser({
         { pattern: /\bendperform\b/i, replacement: "╙──", border: false },
     ],
     extendedExpressions: [
-        { pattern: /\b(perform|varying|from|by)\b/ig, replacement: '<span class="reserved-word">$1</span>' }
+        { pattern: /\b(perform|varying|from|by)\b/ig, replacement: '<span class="reserved-word">$1</span>' },
+        { pattern: /\b__print-pb__\b/ig, replacement: '<span class="print-pb"></span>' }
     ]
 });
 var useExtendedFormatting = true;

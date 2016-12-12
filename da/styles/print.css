@@ -1,3 +1,9 @@
+.print-pb {
+    height: 0px !important;
+
+    page-break-before: always;
+}
+
 .header,
 .sidebar,
 .editor,
