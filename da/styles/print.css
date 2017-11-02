@@ -1,16 +1,14 @@
 .print-pb {
     height: 0px !important;
-
     page-break-before: always;
 }
 
-.header,
-.sidebar,
-.editor,
-.preview .toolbar {
+.topbar,
+.editor-input,
+.editor-output .editor-header {
     display: none;
 }
-.preview .output {
+.editor-output .source-output {
     font-family: Monaco, Consolas, Courier New, Lucida Console, monospace, serif;
     font-size: 10pt;
     line-height: 11pt;

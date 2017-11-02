@@ -1,13 +1,9 @@
 var welcomePanel = document.getElementById("welcomePanel");
-
-var header = document.getElementById("header");
-var sidebar = document.getElementById("sidebar");
-var editor = document.getElementById("editor");
-var preview = document.getElementById("preview");
-var toolbar = document.getElementById("toolbar");
+var buttonOpen = document.getElementById("buttonOpen");
+var buttonOpenWithExample = document.getElementById("buttonOpenWithExample");
+var editorInput = document.getElementById("editorInput");
 var input = document.getElementById("input");
 var output = document.getElementById("output");
-
 var parser = new PseudoCodeParser({
     delimiters: [
         { pattern: /\bperform\b/i, replacement: "╔══ perform", border: "║" },
@@ -21,17 +17,14 @@ var parser = new PseudoCodeParser({
 var useExtendedFormatting = true;
 var liveReload = true;
 var inputValue = input.value;
+var darkTheme = true;
 
 window.addEventListener("load", function() {
-    drawDiagram();
-    setEditorSize();
-
     if (input.value !== "") {
         welcomePanel.style.display = "none";
     }
+    drawDiagram();
 });
-
-window.addEventListener("resize", setEditorSize);
 
 input.addEventListener("keyup", function() {
     if (liveReload && inputValue !== input.value) {
@@ -44,7 +37,6 @@ input.addEventListener("keypress", function (event) {
     // Tabulation
     if (event.keyCode === 9) {
         event.preventDefault();
-
         var cursor = input.selectionStart;
         insert(input, "  ");
         input.selectionStart = cursor + 2;
@@ -52,26 +44,39 @@ input.addEventListener("keypress", function (event) {
     }
 });
 
-// --- Welcome panel ---
+// Welcome Panel
 
 buttonOpen.addEventListener("click", function(event) {
     event.preventDefault();
-
     welcomePanel.style.display = "none";
     input.focus();
 });
 
 buttonOpenWithExample.addEventListener("click", function(event) {
     event.preventDefault();
-
     welcomePanel.style.display = "none";
     input.value = "// Exemple\n\n// On souhaite ajouter, dans un tableau, des personnes identifiées par leurs noms\n// et prénoms. Ensuite, on souhaite afficher à l'écran le contenu du tableau.\n\n---* Exemple de diagramme\nnbPers = 0\nObtenir nomPrénom\n\ndo while (nomPrénom != \"ZZZ\")\n   module(AjoutPersonne;tabPersonnes, nbPersonnes, nomPrénom;tabPersonnes, nbPersonnes)\n   Obtenir nomPrénom\nenddo\nparagraphe(Sorties)\n------\n\n---* AjoutPersonne\niPers = 0\ndo while (iPers < nbPers AND tabPers[iPers] != nomPrénom)\n   iPers++\nenddo\nif (iPers = nbPers)\n   tabPers[iPers] = nomPrénom\nelse\n   Sortir nomPrénom, \" déjà présent dans le tableau.\"\nendif\n------\n\n---* Sorties\niPers = 0\ndo while (iPers < nbPers)\n   Sortir tabPers[iPers]\n   iPers++\nenddo\n------";
     input.focus();
-
     drawDiagram();
 });
 
-// --- Tools - buttons ---
+// General Tool Buttons
+
+var buttonCopyInput = document.getElementById("buttonCopyInput");
+var buttonPrint = document.getElementById("buttonPrint");
+
+buttonCopyInput.addEventListener("click", function(e) {
+    e.preventDefault();
+    input.select();
+	document.execCommand("copy");
+});
+
+buttonPrint.addEventListener("click", function(event) {
+    event.preventDefault();
+    window.print();
+});
+
+// Input Tools Buttons
 
 var buttonInsertMain = document.getElementById("buttonInsert__Main");
 var buttonInsertCondition = document.getElementById("buttonInsert__Condition");
@@ -79,104 +84,95 @@ var buttonInsertSwitch = document.getElementById("buttonInsert__Switch");
 var buttonInsertLoop = document.getElementById("buttonInsert__Loop");
 var buttonInsertParagraph = document.getElementById("buttonInsert__Paragraph");
 var buttonInsertModule = document.getElementById("buttonInsert__Module");
-
-var buttonReload = document.getElementById("buttonReload");
-var buttonLiveReload = document.getElementById("buttonLiveReload");
 var buttonExtendedFormatting = document.getElementById("buttonExtendedFormatting");
-var buttonPrint = document.getElementById("buttonPrint");
+var buttonDarkTheme = document.getElementById("buttonDarkTheme");
 
-buttonInsertMain.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertMain.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "---*\n\n------");
     drawDiagram();
 });
 
-buttonInsertCondition.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertCondition.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "if ()\n\nelse\n\nendif");
     drawDiagram();
 });
 
-buttonInsertSwitch.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertSwitch.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "if ()\n\nelseif ()\n\nelseif ()\n\nelse\n\nendif");
     drawDiagram();
 });
 
-buttonInsertLoop.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertLoop.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "do while ()\n\nenddo");
     drawDiagram();
 });
 
-buttonInsertModule.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertModule.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "module(MonModule;;)");
     drawDiagram();
 });
 
-buttonInsertParagraph.addEventListener("click", function(event) {
-    event.preventDefault();
-
+buttonInsertParagraph.addEventListener("click", function(e) {
+    e.preventDefault();
     insert(input, "paragraphe(MonParagraphe)");
     drawDiagram();
 });
 
-buttonReload.addEventListener("click", function(event) {
-    event.preventDefault();
-
-    drawDiagram();
+buttonDarkTheme.addEventListener("click", function(e) {
+    e.preventDefault();
+    if (darkTheme) {
+        editorInput.classList.remove("editor--dark");
+        buttonDarkTheme.classList.remove("option-item--active");
+    } else {
+        editorInput.classList.add("editor--dark");
+        buttonDarkTheme.classList.add("option-item--active");
+    }
+    darkTheme = !darkTheme;
 });
 
-buttonLiveReload.addEventListener("click", function(event) {
-    event.preventDefault();
-    
-    this.classList.toggle("active");
+// Output Tool Buttons
 
+var buttonReload = document.getElementById("buttonReload");
+var buttonLiveReload = document.getElementById("buttonLiveReload");
+var buttonExtendedFormatting = document.getElementById("buttonExtendedFormatting");
+
+buttonReload.addEventListener("click", function(e) {
+    e.preventDefault();
+    if (!liveReload) {
+        drawDiagram();
+    }
+});
+
+buttonLiveReload.addEventListener("click", function(e) {
+    e.preventDefault();
+    if (liveReload) {
+        buttonLiveReload.classList.remove("option-item--active");
+        buttonReload.classList.remove("option-item--disabled");
+    } else {
+        buttonLiveReload.classList.add("option-item--active");
+        buttonReload.classList.add("option-item--disabled");
+    }
     liveReload = !liveReload;
     drawDiagram();
 });
 
-buttonExtendedFormatting.addEventListener("click", function(event) {
-    event.preventDefault();
-    
-    this.classList.toggle("active");
-
+buttonExtendedFormatting.addEventListener("click", function(e) {
+    e.preventDefault();
+    if (useExtendedFormatting) {
+        buttonExtendedFormatting.classList.remove("option-item--active");
+    } else {
+        buttonExtendedFormatting.classList.add("option-item--active");
+    }
     useExtendedFormatting = !useExtendedFormatting;
     drawDiagram();
 });
 
-buttonPrint.addEventListener("click", function(event) {
-    event.preventDefault();
-
-    window.print();
-});
-
-// --- Functions ---
-
-function setEditorSize() {
-    var containerHeight = window.innerHeight - header.offsetHeight;
-    var containerWidth = (window.innerWidth - sidebar.offsetWidth) / 2;
-
-    sidebar.style.height = containerHeight + "px";
-    editor.style.height = containerHeight + "px";
-    preview.style.height = containerHeight + "px";
-
-    editor.style.width = containerWidth + "px";
-    preview.style.width = containerWidth + "px";
-
-    var contentHeight = editor.offsetHeight - toolbar.offsetHeight;
-
-    input.style.height = contentHeight + "px";
-    input.style.minHeight = contentHeight + "px";
-    input.style.maxHeight = contentHeight + "px";
-    output.style.height = contentHeight + "px";
-}
+// Functions
 
 function drawDiagram() {
     output.innerHTML = parser.getFormattedDiagram(input.value, useExtendedFormatting);

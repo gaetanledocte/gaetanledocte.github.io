@@ -1,76 +1,80 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Editeur de diagrammes d'actions (pseudo-code)</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Editeur de diagrammes d'actions (pseudo-code)</title>
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Oxygen+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Oxygen+Mono">
+    <link rel="stylesheet" href="styles/reset.css" media="all">
+    <link rel="stylesheet" href="styles/app.css" media="screen">
+    <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
+    <link rel="stylesheet" href="styles/print.css" media="print">
 
-        <link rel="stylesheet" href="styles/reset.css" media="all">
-        <link rel="stylesheet" href="styles/app.css" media="screen">
-        <link rel="stylesheet" href="styles/editor.css" media="screen">
-        <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
-        <link rel="stylesheet" href="styles/print.css" media="print">
-
-        <script src="scripts/PseudoCodeParser.js"></script>
-    </head>
-    <body>
-        <div id="welcomePanel" class="welcome">
-            <div class="content">
-                <h1>Editeur de diagrammes d'actions</h1>
-                <h2>(parseur de pseudo-code)</h2>
-
-                <a href="#" class="button" id="buttonOpen" title="Ouvrir l'éditeur de diagramme(s) d'actions">Accéder à l'éditeur</a>
-                <p class="sub-button">
-                    Besoin d'un <a href="#" id="buttonOpenWithExample" title="Ouvrir l'éditeur de diagramme(s) d'actions avec un exemple de code">exemple d'utilisation</a> ?
-                </p>
-                <p class="copyright">
-                    Development version - Alpha v0.2.0<br>
-                    A free-project from <a href="https://www.github.com/gaetanld" target="_blank" title="Gaëtan Le Docte's Github Profile">@gaetanld</a>.
-                </p>
-            </div>
+    <script src="https://use.fontawesome.com/ca53c7c19d.js"></script>
+    <script src="scripts/PseudoCodeParser.js"></script>
+</head>
+<body>
+    <div class="welcome-overlay" id="welcomePanel">
+        <div class="welcome-overlay-content">
+            <h1 class="welcome-title">Editeur de diagrammes d'actions</h1>
+            <h2 class="welcome-subtitle">Parseur de pseudo-code</h2>
+            <a href="#" class="button" id="buttonOpen" title="Ouvrir l'éditeur de diagramme(s) d'actions">Accéder à l'éditeur</a>
+            <p class="welcome-sub-button">
+                Besoin d'un <a href="#" id="buttonOpenWithExample" title="Ouvrir l'éditeur de diagramme(s) d'actions avec un exemple de code">exemple d'utilisation</a> ?
+            </p>
+            <p class="welcome-copyright">
+                Development version - Alpha v0.2.1<br>
+                A free-project from <a href="https://www.github.com/gaetanledocte" target="_blank" title="Gaëtan Le Docte's Github Profile">@gaetanledocte</a>.
+            </p>
         </div>
+    </div>
 
-        <header class="header" id="header">
-            <h2 class="project-title">Editeur de diagrammes d'actions (pseudo-code)</h2>
-        </header>
+    <header class="topbar">
+        <h1 class="topbar-title">Editeur de diagrammes d'actions (pseudo-code)</h1>
+        <nav class="topbar-menu">
+            <a href="#" class="menu-item" id="buttonPrint">Imprimer</a>
+            <a href="#" class="menu-item" id="buttonCopyInput">Copier la source dans le presse-papier</a>
+        </nav>
+    </header>
 
-        <main class="main">
-            <aside class="sidebar" id="sidebar">
-                <h2 class="title">Explorateur</h2>
-            </aside>
+    <main class="editor-container">
+        <section class="editor editor-input editor--split editor--dark" id="editorInput">
+            <header class="editor-header">
+                <h2 class="header-title">Editeur</h2>
+                <ul class="header-option-items">
+                    <li class="option-item" id="buttonInsert__Main">Bloc principal</li>
+                    <li class="option-item" id="buttonInsert__Condition">Condition</li>
+                    <li class="option-item" id="buttonInsert__Switch">Switch</li>
+                    <li class="option-item" id="buttonInsert__Loop">Boucle</li>
+                    <li class="option-item" id="buttonInsert__Module">Module</li>
+                    <li class="option-item" id="buttonInsert__Paragraph">Paragraphe</li>
+                    <li class="option-item option-item--align-end option-item--active" id="buttonDarkTheme">Thème sombre</li>
+                </ul>
+            </header>
+            
+            <div class="editor-content editor-content--input">
+                <textarea class="source-input" id="input" placeholder="Diagramme d'actions (pseudo-code)..."></textarea>
+            </div>
+        </section>
 
-            <section class="editor" id="editor">
-                <div class="toolbar" id="toolbar">
-                    <h2 class="title">Editeur</h2>
+        <section class="editor editor-output editor--split">
+            <header class="editor-header">
+                <h2 class="header-title">Résultat</h2>
+                <ul class="header-option-items">
+                    <li class="option-item option-item--disabled" id="buttonReload">Actualiser</li>
+                    <li class="option-item option-item--active" id="buttonLiveReload">Actualisation en direct</li>
+                    <li class="option-item option-item--active" id="buttonExtendedFormatting">Mise en forme étendue</li>
+                </ul>
+            </header>
 
-                    <div class="tools">
-                        <a href="#" class="item" id="buttonInsert__Main">Bloc principal</a>
-                        <a href="#" class="item" id="buttonInsert__Condition">Condition</a>
-                        <a href="#" class="item" id="buttonInsert__Switch">Switch</a>
-                        <a href="#" class="item" id="buttonInsert__Loop">Boucle</a>
-                        <a href="#" class="item" id="buttonInsert__Module">Module</a>
-                        <a href="#" class="item" id="buttonInsert__Paragraph">Paragraphe</a>
-                    </div>
-                </div>
-                <textarea id="input" class="input" placeholder="Diagramme(s) d'actions (pseudo-code)..."></textarea>
-            </section>
+            <div class="editor-content editor-content--output">
+                <pre class="source-output pcp-highlight" id="output">fff</pre>
+            </div>
+        </section>
+    </main>
 
-            <section class="preview" id="preview">
-                <div class="toolbar" id="toolbar">
-                    <h2 class="title">Résultat</h2>
-
-                    <div class="tools">
-                        <a href="#" class="item space-right" id="buttonReload">Actualiser</a>
-                        <a href="#" class="item active" id="buttonLiveReload">Aperçu en direct</a>
-                        <a href="#" class="item active" id="buttonExtendedFormatting">Mise en forme étendue</a>
-                        <a href="#" class="item space-around" id="buttonPrint">Imprimer</a>
-                    </div>
-                </div>
-                <pre id="output" class="output pcp-highlight"></pre>
-            </section>
-        </main>
-
-        <script src="scripts/app.js"></script>
-    </body>
+    <script src="scripts/app.js"></script>
+</body>
 </html>
