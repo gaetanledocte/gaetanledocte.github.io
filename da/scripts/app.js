@@ -212,7 +212,7 @@ function saveTextAsFile() {
     document.body.appendChild(downloadLink);
 
     downloadLink.click();
-    toastr.success("Sauvegardé !","Code source téléchargé via le navigateur.");
+    toastr.success("Code source téléchargé via le navigateur.","Sauvegardé !");
 }
 
 function destroyClickedElement(event) {
