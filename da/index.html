@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +10,11 @@
     <link rel="stylesheet" href="styles/reset.css" media="all">
     <link rel="stylesheet" href="styles/app.css" media="screen">
     <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
+    <link rel="stylesheet" href="styles/toastr.min.css" media="screen">
     <link rel="stylesheet" href="styles/print.css" media="print">
-    <link href="styles/toastr.min.css" rel="stylesheet"/>
 
     <script src="https://use.fontawesome.com/ca53c7c19d.js"></script>
     <script src="scripts/PseudoCodeParser.js"></script>
-
 </head>
 <body>
     <div class="welcome-overlay" id="welcomePanel">
@@ -36,17 +35,16 @@
     <header class="topbar">
         <h1 class="topbar-title">Editeur de diagrammes d'actions (pseudo-code)</h1>
         <nav class="topbar-menu">
-            <input id="inputFileNameToSaveAs" placeholder="Nom de la sauvegarde"></input>
-            <a href="#" class="menu-item" id="buttonSaveAsFile">Sauvegarder</a>
-            <a href="#" class="menu-item" id="buttonPrint">Imprimer</a>
-            <a href="#" class="menu-item" id="buttonCopyInput">Copier la source dans le presse-papier</a>
+            <a href="#" class="menu-item" id="buttonPrint">Imprimer le résultat</a>
+            <input class="menu-item menu-item--input" type="text" placeholder="Nom du fichier à exporter..." id="inputFileNameToSaveAs">
+            <a href="#" class="menu-item menu-item--input-button" id="buttonSaveAsFile">Exporter la source</a>
         </nav>
     </header>
 
     <main class="editor-container">
         <section class="editor editor-input editor--split editor--dark" id="editorInput">
             <header class="editor-header">
-                <h2 class="header-title">Editeur</h2>
+                <h2 class="header-title">Source</h2>
                 <ul class="header-option-items">
                     <li class="option-item" id="buttonInsert__Main">Bloc principal</li>
                     <li class="option-item" id="buttonInsert__Condition">Condition</li>
@@ -74,14 +72,13 @@
             </header>
 
             <div class="editor-content editor-content--output">
-                <pre class="source-output pcp-highlight" id="output">fff</pre>
+                <pre class="source-output pcp-highlight" id="output"></pre>
             </div>
         </section>
     </main>
 
     <script src="scripts/app.js"></script>
-    <script src="scripts/jquery-3.2.1.min.js"></script>
-    <script src="scripts/toastr.min.js"></script>
-
+    <script src="scripts/libraries/jquery-3.2.1.min.js"></script>
+    <script src="scripts/libraries/toastr.min.js"></script>
 </body>
 </html>

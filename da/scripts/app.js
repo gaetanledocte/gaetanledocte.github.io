@@ -62,17 +62,9 @@ buttonOpenWithExample.addEventListener("click", function(event) {
 
 // General Tool Buttons
 
-var buttonCopyInput = document.getElementById("buttonCopyInput");
 var buttonPrint = document.getElementById("buttonPrint");
+var inputFileNameToSaveAs = document.getElementById("inputFileNameToSaveAs");
 var buttonSaveAsFile = document.getElementById("buttonSaveAsFile");
-
-buttonCopyInput.addEventListener("click", function(e) {
-    e.preventDefault();
-    input.select();
-	document.execCommand("copy");
-  toastr.success('Copié !');
-
-});
 
 buttonPrint.addEventListener("click", function(event) {
     event.preventDefault();
@@ -81,7 +73,15 @@ buttonPrint.addEventListener("click", function(event) {
 
 buttonSaveAsFile.addEventListener("click", function(event){
     event.preventDefault();
-    saveTextAsFile();
+
+    var fileName = inputFileNameToSaveAs.value;
+
+    if (fileName) {
+        saveTextAsFile(fileName);
+        toastr.success("L'export a bien été créé.", "Export réussi");
+    } else {
+        toastr.error("Veuillez spécifier un nom pour le fichier à exporter.", "Erreur");
+    }
 });
 
 // Input Tools Buttons
@@ -197,24 +197,21 @@ function insert(input, string) {
     input.focus();
 };
 
-function saveTextAsFile() {
-    var textToSave = document.getElementById("input").value;
-    var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
-    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
-    var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+function saveTextAsFile(fileName) {
+    var source = input.value.replace(/\n/g, "\r\n");
+    var fileUrl = window.URL.createObjectURL(new Blob([source], {type:"text/plain"}));
+    var downloadLink = createDownloadLink(fileUrl, fileName);
 
-    var downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
-    downloadLink.href = textToSaveAsURL;
-    downloadLink.onclick = destroyClickedElement;
-    downloadLink.style.display = "none";
     document.body.appendChild(downloadLink);
-
     downloadLink.click();
-    toastr.success("Code source téléchargé via le navigateur.","Sauvegardé !");
+    document.body.removeChild(downloadLink);
 }
 
-function destroyClickedElement(event) {
-    document.body.removeChild(event.target);
+function createDownloadLink(href, name) {
+    var downloadLink = document.createElement("a");
+    downloadLink.download = name;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = href;
+    downloadLink.style.display = "none";
+    return downloadLink;
 }

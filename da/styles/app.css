@@ -8,6 +8,11 @@ body {
     font-size: 100%;
 }
 
+input, textarea {
+    font-family: "Open Sans", sans-serif;
+    font-size: 100%;
+}
+
 /* Welcome Overlay */
 
 .welcome-overlay {
@@ -103,19 +108,44 @@ body {
 }
 
 .topbar .topbar-menu {
+    display: flex;
+    align-items: center;
     margin-right: -0.75rem;
 }
 
 .topbar .topbar-menu .menu-item {
     margin: 0 0.75rem;
     color: inherit;
-    font-size: 0.95rem;
+    font-size: 0.825rem;
     text-decoration: none;
 }
 
 .topbar .topbar-menu .menu-item:active,
 .topbar .topbar-menu .menu-item:hover {
     color: #fff;
+}
+
+.topbar .menu-item.menu-item--input,
+.topbar .menu-item.menu-item--input-button {
+    display: flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 0.5rem;
+    border: 1px solid #555;
+}
+
+.topbar .menu-item.menu-item--input {
+    width: 220px;
+    margin-right: 0;
+    border-radius: 3px 0 0 3px;
+    background-color: #333;
+    color: #fff;
+}
+
+.topbar .topbar-menu .menu-item.menu-item--input-button {
+    margin-left: 0;
+    border-radius: 0 3px 3px 0;
+    background-color: #555;
 }
 
 /* Editor */
@@ -131,7 +161,6 @@ body {
 .editor.editor--dark {
     background-color: #333;
     border-bottom-color: #222;
-    border-right-color: #222;
     color: #fff;
 }
 
@@ -272,6 +301,10 @@ body {
 
     .editor.editor--split:last-child {
         border-right-width: 0;
+    }
+
+    .editor.editor--dark.editor--split {
+        border-right-color: #222;
     }
     
     .editor .editor-content.editor-content--input,
