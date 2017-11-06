@@ -11,9 +11,11 @@
     <link rel="stylesheet" href="styles/app.css" media="screen">
     <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
     <link rel="stylesheet" href="styles/print.css" media="print">
+    <link href="styles/toastr.min.css" rel="stylesheet"/>
 
     <script src="https://use.fontawesome.com/ca53c7c19d.js"></script>
     <script src="scripts/PseudoCodeParser.js"></script>
+
 </head>
 <body>
     <div class="welcome-overlay" id="welcomePanel">
@@ -34,6 +36,8 @@
     <header class="topbar">
         <h1 class="topbar-title">Editeur de diagrammes d'actions (pseudo-code)</h1>
         <nav class="topbar-menu">
+            <input id="inputFileNameToSaveAs" placeholder="Nom de la sauvegarde"></input>
+            <a href="#" class="menu-item" id="buttonSaveAsFile">Sauvegarder</a>
             <a href="#" class="menu-item" id="buttonPrint">Imprimer</a>
             <a href="#" class="menu-item" id="buttonCopyInput">Copier la source dans le presse-papier</a>
         </nav>
@@ -53,7 +57,7 @@
                     <li class="option-item option-item--align-end option-item--active" id="buttonDarkTheme">Thème sombre</li>
                 </ul>
             </header>
-            
+
             <div class="editor-content editor-content--input">
                 <textarea class="source-input" id="input" placeholder="Diagramme d'actions (pseudo-code)..."></textarea>
             </div>
@@ -76,5 +80,8 @@
     </main>
 
     <script src="scripts/app.js"></script>
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+    <script src="scripts/toastr.min.js"></script>
+
 </body>
 </html>

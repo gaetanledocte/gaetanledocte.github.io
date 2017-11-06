@@ -64,16 +64,24 @@ buttonOpenWithExample.addEventListener("click", function(event) {
 
 var buttonCopyInput = document.getElementById("buttonCopyInput");
 var buttonPrint = document.getElementById("buttonPrint");
+var buttonSaveAsFile = document.getElementById("buttonSaveAsFile");
 
 buttonCopyInput.addEventListener("click", function(e) {
     e.preventDefault();
     input.select();
 	document.execCommand("copy");
+  toastr.success('Copié !');
+
 });
 
 buttonPrint.addEventListener("click", function(event) {
     event.preventDefault();
     window.print();
+});
+
+buttonSaveAsFile.addEventListener("click", function(event){
+    event.preventDefault();
+    saveTextAsFile();
 });
 
 // Input Tools Buttons
@@ -188,3 +196,25 @@ function insert(input, string) {
     input.selectionEnd = input.selectionStart;
     input.focus();
 };
+
+function saveTextAsFile() {
+    var textToSave = document.getElementById("input").value;
+    var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+    var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+    toastr.success("Code source téléchargé via le navigateur.","Sauvegardé !");
+}
+
+function destroyClickedElement(event) {
+    document.body.removeChild(event.target);
+}
