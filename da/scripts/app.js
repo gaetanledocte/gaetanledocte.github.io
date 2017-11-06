@@ -69,6 +69,8 @@ buttonCopyInput.addEventListener("click", function(e) {
     e.preventDefault();
     input.select();
 	document.execCommand("copy");
+  toastr.success('Copié !');
+
 });
 
 buttonPrint.addEventListener("click", function(event) {
