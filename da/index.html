@@ -11,9 +11,11 @@
     <link rel="stylesheet" href="styles/app.css" media="screen">
     <link rel="stylesheet" href="styles/pcp-highlight.css" media="all">
     <link rel="stylesheet" href="styles/print.css" media="print">
+    <link href="styles/toastr.css" rel="stylesheet"/>
 
     <script src="https://use.fontawesome.com/ca53c7c19d.js"></script>
     <script src="scripts/PseudoCodeParser.js"></script>
+
 </head>
 <body>
     <div class="welcome-overlay" id="welcomePanel">
@@ -53,7 +55,7 @@
                     <li class="option-item option-item--align-end option-item--active" id="buttonDarkTheme">Thème sombre</li>
                 </ul>
             </header>
-            
+
             <div class="editor-content editor-content--input">
                 <textarea class="source-input" id="input" placeholder="Diagramme d'actions (pseudo-code)..."></textarea>
             </div>
@@ -76,5 +78,8 @@
     </main>
 
     <script src="scripts/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="scripts/toastr.js"></script>
+
 </body>
 </html>
