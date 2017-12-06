@@ -16,7 +16,7 @@
     <script src="https://use.fontawesome.com/ca53c7c19d.js"></script>
     <script src="scripts/PseudoCodeParser.js"></script>
 </head>
-<body onload="putCookieContentToInput">
+<body onload="putCacheContentToInput()">
     <div class="welcome-overlay" id="welcomePanel">
         <div class="welcome-overlay-content">
             <h1 class="welcome-title">Editeur de diagrammes d'actions</h1>
@@ -79,13 +79,9 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/libraries/jquery-3.2.1.min.js"></script>
     <script src="scripts/libraries/toastr.min.js"></script>
-    <script language="javascript">
-            var x = setInterval(function(){ setCookie("input",document.getElementById("input").value,30); }, 3000);
-            window.addEventListener("beforeunload", function (e) {
-                var confirmationMessage = "\o/";
-                //setCookie("input",document.getElementById("input").value,30);
-                (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-                return confirmationMessage;                            //Webkit, Safari, Chrome
+    <script>
+			window.addEventListener("beforeunload", function (e) {
+                saveContentToCache();
             });
         </script>
 </body>
