@@ -215,3 +215,12 @@ function createDownloadLink(href, name) {
     downloadLink.style.display = "none";
     return downloadLink;
 }
+
+function saveContentToCache(){
+	localStorage['codeDA'] = document.getElementById('input').value; // only strings
+}
+
+function putCacheContentToInput(){
+	var codeDA = localStorage['codeDA'] || '';
+	document.getElementById("input").value = codeDA;
+}
