@@ -222,7 +222,5 @@ function saveContentToCache(){
 
 function putCacheContentToInput(){
 	var codeDA = localStorage['codeDA'] || '';
-	console.log("test");
 	document.getElementById("input").value = codeDA;
-	console.log("test");
 }
