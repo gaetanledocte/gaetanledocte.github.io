@@ -62,9 +62,17 @@ buttonOpenWithExample.addEventListener("click", function(event) {
 
 // General Tool Buttons
 
+var buttonNew = document.getElementById("buttonNew");
 var buttonPrint = document.getElementById("buttonPrint");
 var inputFileNameToSaveAs = document.getElementById("inputFileNameToSaveAs");
 var buttonSaveAsFile = document.getElementById("buttonSaveAsFile");
+
+buttonNew.addEventListener("click", function(event){
+    event.preventDefault();
+    localStorage["codeDA"] = "";
+    input.value = "";
+    output.innerHTML = "";
+});
 
 buttonPrint.addEventListener("click", function(event) {
     event.preventDefault();
@@ -217,7 +225,7 @@ function createDownloadLink(href, name) {
 }
 
 function saveContentToCache(){
-	localStorage['codeDA'] = document.getElementById('input').value; // only strings
+	localStorage['codeDA'] = document.getElementById('input').value;
 }
 
 function putCacheContentToInput(){
