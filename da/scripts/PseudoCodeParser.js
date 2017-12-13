@@ -32,47 +32,7 @@ var PseudoCodeParser = function(ownValues) {
         { pattern: /\b(true|false|break|stop|vrai|faux|hv|lv|null|nil|equal)\b/ig, replacement: '<span class="reserved-word">$1</span>' },
         { pattern: /\b(obtenir|sortir|libérer|liberer|traiter|get|print|return|free|process)\b/ig, replacement: '<span class="keyword">$1</span>' },
         { pattern: /┌─── \* (.*)/ig, replacement: '┌─── * <span class="diagram-title">$1</span>' },
-        { pattern: /\[([^\]]+)\]ent/ig, replacement: '<span class="whole-part">[</span>$1<span class="whole-part">]ENT</span>' },
-        {
-            pattern: /([a-z0-9]+)\(([^=.\n]*)\)/ig,
-            replacement: function (match, title, content) {
-                if (content.length > 0) {
-                    let index = "(";
-
-                    content.split(")(").forEach(function (value) {
-                        value.split(",").forEach(function (v) {
-                            index += '<span class="array">' + v + '</span>,';
-                        });
-                        index = index.substring(0, index.length - 1);
-                        index += ")(";
-                    });
-
-                    return title + index.substring(0, index.length - 1);
-                } else {
-                    return title + "()";
-                }
-            }
-        },
-        {
-            pattern: /([a-z0-9]+)\[([a-z0-9 +,]*)\]/ig,
-            replacement: function (match, title, content) {
-                if (content.length > 0) {
-                    let index = "[";
-
-                    content.split("][").forEach(function (value) {
-                        value.split(",").forEach(function (v) {
-                            index += '<span class="array">' + v + '</span>,';
-                        });
-                        index = index.substring(0, index.length - 1);
-                        index += "][";
-                    });
-
-                    return title + index.substring(0, index.length - 1);
-                } else {
-                    return title + "[]";
-                }
-            }
-        }
+        { pattern: /\[([^\]]+)\]ent/ig, replacement: '<span class="whole-part">[</span>$1<span class="whole-part">]ENT</span>' }
     ];
 
     if (ownValues) {
@@ -151,14 +111,14 @@ PseudoCodeParser.prototype.escapeHtml = function(string) {
 };
 
 PseudoCodeParser.prototype.parseModules = function(string) {
-    string = string.replace(/paragraph[e]?\((.+)\)/g, (function(match, title) {
+    string = string.replace(/paragraph[e]?\((.+)\)/ig, (function(match, title) {
         return this.createModule(title, "", "", {
             topLeft:    '┌',    topRight:   '┐',
             bottomLeft: '└',    bottomRight:'┘',
         });
     }).bind(this));
 
-    string = string.replace(/module?\(([^;)\n]+)[;]?([^;)\n]*)[;]?([^)\n]*)\)/ig, (function(match, title, inputs, outputs) {
+    string = string.replace(/module\(([^;\n]+)[;]?([^;\n]*)[;]?([^\n]*)\)$/igm, (function(match, title, inputs, outputs) {
         inputs = (inputs.trim().length > 0) ? " ↓ " + inputs : "";
         outputs = (outputs.trim().length > 0) ? " ↓ " + outputs : "";
 
