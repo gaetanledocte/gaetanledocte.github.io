@@ -26,6 +26,14 @@ window.addEventListener("load", function() {
     drawDiagram();
 });
 
+//CTRL + S
+document.addEventListener("keydown", function(event) {
+    if ((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)  && event.keyCode == 83) {
+      event.preventDefault();
+      saveContentToCache();
+    }
+  }, false);
+
 input.addEventListener("keyup", function() {
     if (liveReload && inputValue !== input.value) {
         inputValue = input.value;
@@ -66,12 +74,18 @@ var buttonNew = document.getElementById("buttonNew");
 var buttonPrint = document.getElementById("buttonPrint");
 var inputFileNameToSaveAs = document.getElementById("inputFileNameToSaveAs");
 var buttonSaveAsFile = document.getElementById("buttonSaveAsFile");
+var buttonSaveInCache = document.getElementById("buttonSaveInCache");
 
 buttonNew.addEventListener("click", function(event){
     event.preventDefault();
     localStorage["codeDA"] = "";
     input.value = "";
     output.innerHTML = "";
+});
+
+buttonSaveInCache.addEventListener("click", function(event){
+    event.preventDefault();
+    saveContentToCache();
 });
 
 buttonPrint.addEventListener("click", function(event) {
@@ -103,44 +117,44 @@ var buttonInsertModule = document.getElementById("buttonInsert__Module");
 var buttonExtendedFormatting = document.getElementById("buttonExtendedFormatting");
 var buttonDarkTheme = document.getElementById("buttonDarkTheme");
 
-buttonInsertMain.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertMain.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "---*\n\n------");
     drawDiagram();
 });
 
-buttonInsertCondition.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertCondition.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "if ()\n\nelse\n\nendif");
     drawDiagram();
 });
 
-buttonInsertSwitch.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertSwitch.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "if ()\n\nelseif ()\n\nelseif ()\n\nelse\n\nendif");
     drawDiagram();
 });
 
-buttonInsertLoop.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertLoop.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "do while ()\n\nenddo");
     drawDiagram();
 });
 
-buttonInsertModule.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertModule.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "module(MonModule;;)");
     drawDiagram();
 });
 
-buttonInsertParagraph.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonInsertParagraph.addEventListener("click", function(event) {
+    event.preventDefault();
     insert(input, "paragraphe(MonParagraphe)");
     drawDiagram();
 });
 
-buttonDarkTheme.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonDarkTheme.addEventListener("click", function(event) {
+    event.preventDefault();
     if (darkTheme) {
         editorInput.classList.remove("editor--dark");
         buttonDarkTheme.classList.remove("option-item--active");
@@ -157,15 +171,15 @@ var buttonReload = document.getElementById("buttonReload");
 var buttonLiveReload = document.getElementById("buttonLiveReload");
 var buttonExtendedFormatting = document.getElementById("buttonExtendedFormatting");
 
-buttonReload.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonReload.addEventListener("click", function(event) {
+    event.preventDefault();
     if (!liveReload) {
         drawDiagram();
     }
 });
 
-buttonLiveReload.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonLiveReload.addEventListener("click", function(event) {
+    event.preventDefault();
     if (liveReload) {
         buttonLiveReload.classList.remove("option-item--active");
         buttonReload.classList.remove("option-item--disabled");
@@ -177,8 +191,8 @@ buttonLiveReload.addEventListener("click", function(e) {
     drawDiagram();
 });
 
-buttonExtendedFormatting.addEventListener("click", function(e) {
-    e.preventDefault();
+buttonExtendedFormatting.addEventListener("click", function(event) {
+    event.preventDefault();
     if (useExtendedFormatting) {
         buttonExtendedFormatting.classList.remove("option-item--active");
     } else {
@@ -225,7 +239,8 @@ function createDownloadLink(href, name) {
 }
 
 function saveContentToCache(){
-	localStorage['codeDA'] = document.getElementById('input').value;
+    localStorage['codeDA'] = document.getElementById('input').value;
+    toastr.success("DA enregistré dans le cache du navigateur.","Sauvegardé !");
 }
 
 function putCacheContentToInput(){
