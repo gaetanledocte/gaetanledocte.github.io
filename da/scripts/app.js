@@ -29,8 +29,8 @@ window.addEventListener("load", function() {
 //CTRL + S
 document.addEventListener("keydown", function(event) {
     if ((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)  && event.keyCode == 83) {
-      event.preventDefault();
-      saveContentToCache();
+        event.preventDefault();
+        saveContentToCache();
     }
   }, false);
 

@@ -23,7 +23,6 @@ var PseudoCodeParser = function(ownValues) {
         { pattern: /=>/g, replacement: "⇒" },
         { pattern: /sqrt\^/g, replacement: "√" },
         { pattern: /&&/g, replacement: "AND" }
-        
     ];
 
     this.extendedExpressions = [
